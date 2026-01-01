@@ -1,0 +1,2 @@
+# Load board Kconfig descriptions.
+osource "C:/zephyrproject/DEM_ZEPHYR/boards/demsay/demedukit_esp32/Kconfig.demedukit_esp32"

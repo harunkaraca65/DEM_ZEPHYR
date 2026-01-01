@@ -1,0 +1,6 @@
+if BOARD_DEMEDUKIT_STM32
+config BOARD
+default "demedukit_stm32"
+config SOC_STM32G030XX
+default y
+endif

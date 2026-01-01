@@ -1,0 +1,6 @@
+board:
+  name: demedukit_esp32
+  full_name: DemeduKit ESP32
+  vendor: demsay
+  socs:
+  - name: esp32

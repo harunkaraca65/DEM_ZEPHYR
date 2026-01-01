@@ -1,0 +1,5 @@
+west:
+  command: C:\Users\hrnkr\AppData\Local\Programs\Python\Python312\Scripts\west build
+    -p always -b demedukit_esp32/esp32/procpu -- -DBOARD_ROOT=C:\zephyrproject\DEM_ZEPHYR
+  topdir: C:\zephyrproject
+  version: 1.5.0

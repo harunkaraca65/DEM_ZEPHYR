@@ -1,0 +1,7 @@
+identifier: demedukit_esp32/esp32/appcpu
+name: DemeduKit ESP32 APPCPU
+type: mcu
+arch: xtensa
+toolchain:
+  - zephyr
+vendor: demsay

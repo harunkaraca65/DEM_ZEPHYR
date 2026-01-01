@@ -1,0 +1,189 @@
+/dts-v1/;
+
+#include <st/g0/stm32g030.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <dt-bindings/pinctrl/stm32-pinctrl.h>
+
+/ {
+model = "Demsay DemeduKit STM32 Board";
+compatible = "demsay,demedukit-stm32";
+
+chosen {
+zephyr,console = &usart1;
+zephyr,shell-uart = &usart1;
+zephyr,sram = &sram0;
+zephyr,flash = &flash0;
+};
+
+aliases {
+uart-pc = &usart1;
+uart-mcu = &usart2;
+i2c-bus = &i2c1;
+led0 = &led_red;
+led1 = &led_green;
+led2 = &led_blue;
+led3 = &led_white;
+led4 = &led_yellow;
+sw0 = &button1;
+sw1 = &button2;
+sw2 = &button3;
+accel0 = &lis2dw12;
+};
+
+leds {
+compatible = "gpio-leds";
+led_red: led_pd3 {
+gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
+label = "LED1 Red";
+};
+led_green: led_pd2 {
+gpios = <&gpiod 2 GPIO_ACTIVE_HIGH>;
+label = "LED2 Green";
+};
+led_blue: led_pd1 {
+gpios = <&gpiod 1 GPIO_ACTIVE_HIGH>;
+label = "LED3 Blue";
+};
+led_white: led_pd0 {
+gpios = <&gpiod 0 GPIO_ACTIVE_HIGH>;
+label = "LED4 White";
+};
+led_yellow: led_pa15 {
+gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
+label = "LED5 Yellow";
+};
+};
+
+gpio_keys {
+compatible = "gpio-keys";
+button1: button_1 {
+label = "User Button 1";
+gpios = <&gpiob 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+zephyr,code = <INPUT_KEY_0>;
+};
+button2: button_2 {
+label = "User Button 2";
+gpios = <&gpiob 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+zephyr,code = <INPUT_KEY_1>;
+};
+button3: button_3 {
+label = "User Button 3";
+gpios = <&gpiob 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+zephyr,code = <INPUT_KEY_2>;
+};
+};
+};
+
+&clk_hsi {
+status = "okay";
+};
+
+&pll {
+div-m = <1>;
+mul-n = <8>;
+div-p = <2>;
+div-r = <2>;
+clocks = <&clk_hsi>;
+status = "okay";
+};
+
+&rcc {
+clocks = <&pll>;
+clock-frequency = <64000000>;
+ahb-prescaler = <1>;
+apb1-prescaler = <1>;
+};
+
+&pinctrl {
+usart1_tx_pa9: usart1_tx_pa9 {
+pinmux = <STM32_PINMUX('A', 9, AF1)>;
+bias-pull-up;
+};
+usart1_rx_pa10: usart1_rx_pa10 {
+pinmux = <STM32_PINMUX('A', 10, AF1)>;
+};
+usart2_tx_pa2: usart2_tx_pa2 {
+pinmux = <STM32_PINMUX('A', 2, AF1)>;
+bias-pull-up;
+};
+usart2_rx_pa3: usart2_rx_pa3 {
+pinmux = <STM32_PINMUX('A', 3, AF1)>;
+};
+i2c1_scl_pb6: i2c1_scl_pb6 {
+pinmux = <STM32_PINMUX('B', 6, AF6)>;
+bias-pull-up;
+drive-open-drain;
+};
+i2c1_sda_pb7: i2c1_sda_pb7 {
+pinmux = <STM32_PINMUX('B', 7, AF6)>;
+bias-pull-up;
+drive-open-drain;
+};
+adc1_in0_pa0: adc1_in0_pa0 {
+pinmux = <STM32_PINMUX('A', 0, ANALOG)>;
+};
+adc1_in1_pa1: adc1_in1_pa1 {
+pinmux = <STM32_PINMUX('A', 1, ANALOG)>;
+};
+adc1_in4_pa4: adc1_in4_pa4 {
+pinmux = <STM32_PINMUX('A', 4, ANALOG)>;
+};
+adc1_in5_pa5: adc1_in5_pa5 {
+pinmux = <STM32_PINMUX('A', 5, ANALOG)>;
+};
+};
+
+&usart1 {
+pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
+pinctrl-names = "default";
+current-speed = <115200>;
+status = "okay";
+};
+
+&usart2 {
+pinctrl-0 = <&usart2_tx_pa2 &usart2_rx_pa3>;
+pinctrl-names = "default";
+current-speed = <115200>;
+status = "okay";
+};
+
+&i2c1 {
+pinctrl-0 = <&i2c1_scl_pb6 &i2c1_sda_pb7>;
+pinctrl-names = "default";
+status = "okay";
+clock-frequency = <I2C_BITRATE_FAST>;
+lis2dw12: lis2dw12@19 {
+compatible = "st,lis2dw12";
+reg = <0x19>;
+irq-gpios = <&gpioa 12 GPIO_ACTIVE_HIGH>;
+};
+};
+
+&adc1 {
+pinctrl-0 = <&adc1_in0_pa0 &adc1_in1_pa1 &adc1_in4_pa4 &adc1_in5_pa5>;
+pinctrl-names = "default";
+status = "okay";
+st,adc-clock-source = "SYNC";
+st,adc-prescaler = <4>;
+vref-mv = <3300>;
+#address-cells = <1>;
+#size-cells = <0>;
+channel@0 {
+reg = <0>;
+zephyr,gain = "ADC_GAIN_1";
+zephyr,reference = "ADC_REF_INTERNAL";
+zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+zephyr,resolution = <12>;
+};
+channel@1 { reg = <1>; zephyr,gain = "ADC_GAIN_1"; zephyr,reference = "ADC_REF_INTERNAL"; zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>; zephyr,resolution = <12>; };
+channel@4 { reg = <4>; zephyr,gain = "ADC_GAIN_1"; zephyr,reference = "ADC_REF_INTERNAL"; zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>; zephyr,resolution = <12>; };
+channel@5 { reg = <5>; zephyr,gain = "ADC_GAIN_1"; zephyr,reference = "ADC_REF_INTERNAL"; zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>; zephyr,resolution = <12>; };
+};
+
+&flash0 {
+reg = <0x08000000 DT_SIZE_K(64)>;
+};
+
+&sram0 {
+reg = <0x20000000 DT_SIZE_K(8)>;
+};

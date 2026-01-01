@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_DEMEDUKIT_ESP32
+
+config BOARD
+default "demedukit_esp32"
+
+endif # BOARD_DEMEDUKIT_ESP32

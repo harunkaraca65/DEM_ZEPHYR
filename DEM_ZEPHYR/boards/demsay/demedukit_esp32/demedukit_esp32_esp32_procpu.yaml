@@ -1,0 +1,12 @@
+identifier: demedukit_esp32/esp32/procpu
+name: DemeduKit ESP32 PROCPU
+type: mcu
+arch: xtensa
+toolchain:
+  - zephyr
+supported:
+  - adc
+  - gpio
+  - i2c
+  - uart
+vendor: demsay

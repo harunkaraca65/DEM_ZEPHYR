@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_DEMEDUKIT_ESP32
+bool "DemeduKit ESP32"
+depends on SOC_SERIES_ESP32

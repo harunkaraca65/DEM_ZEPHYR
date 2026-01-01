@@ -1,0 +1,2 @@
+# Load Zephyr board defconfig descriptions.
+osource "C:/zephyrproject/DEM_ZEPHYR/boards/demsay/demedukit_esp32/Kconfig.defconfig"
